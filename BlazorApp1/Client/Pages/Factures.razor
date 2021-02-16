@@ -1,0 +1,55 @@
+﻿@page "/factures"
+
+@using BlazorApp1.Shared
+@inject HttpClient http
+
+<h1>Factures</h1>
+
+@if(Allfactures == null)
+{
+    <p>En attente</p>
+
+}
+else
+{
+
+
+<table>
+    <tr>
+        
+        <th>| N°Facture | </th>
+        <th>| ID |  </th>
+        <th>| Nom Client |  </th>
+        <th>| Montant dù |  </th>
+        <th>| Montant réglé |  </th>
+        <th>| Montant restant | </th>
+        <th>| Date emission |  </th>
+        <th>| Date attendu |  </th>
+       
+    </tr>
+    @foreach (var facture in Allfactures)
+    {
+    <tr>
+        <td>@facture.NumeroFacture</td>
+        <td>@facture.Id</td>
+        <td>@facture.Client</td>
+        <td>@facture.MontantDu</td>
+        <td>@facture.MontantRegle</td>
+        <td>@facture.MontantRestant</td>
+        <td>@facture.DateEmission.ToShortDateString()</td>
+        <td>@facture.DateAttendu.ToShortDateString()</td>
+    <td></td>
+    </tr>
+    }
+</table>
+}
+    @code {
+
+       private IEnumerable<Facture> Allfactures = null;
+
+        protected override async Task OnInitializedAsync()
+        {
+            Allfactures = await http.GetFromJsonAsync<IEnumerable<Facture>>("api/factures");
+
+        }
+}
